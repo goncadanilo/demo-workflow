@@ -2,9 +2,37 @@ name: Development
 on: workflow_dispatch
 
 jobs:
-  ci: 
-    name: CI
-    uses: ./.github/workflows/ci.yml
+  ci:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+
+    steps:
+    - name: '⬇️ checkout'
+    - uses: actions/checkout@v3
+
+    - name: '🛠️ setup node - ${{ matrix.node-version }}'
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: '📥 install dependencies (NPM)'
+      run: npm install
+
+    - name: '📦 build'
+      run: npm run build
+
+    - name: '🧪 tests'
+      run: npm run test
+
+    - name: '🔍 sonar analysis'
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
 
   deploy:
     name: Deploy - Development
