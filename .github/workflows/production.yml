@@ -28,4 +28,8 @@ jobs:
   deploy:
     name: Deploy - Production
     needs: release-please
-    run: echo "Successful deployment"
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Deployment
+        run: echo "Successful deployment"

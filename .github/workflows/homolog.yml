@@ -10,4 +10,8 @@ jobs:
   deploy:
     name: Deploy - Homolog
     needs: ci
-    run: echo "Successful deployment"
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Deployment
+        run: echo "Successful deployment"
