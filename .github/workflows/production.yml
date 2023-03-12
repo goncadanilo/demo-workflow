@@ -1,0 +1,31 @@
+name: Production
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  app_name: 'demo-workflow'
+
+jobs:
+  ci: 
+    name: CI
+    uses: ./.github/workflows/ci.yml
+
+  release-please:
+    needs: ci
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          release-type: node
+          package-name: ${{ env.app_name }}
+    
+  deploy:
+    name: Deploy - Production
+    needs: release-please
+    run: echo "Successful deployment"
