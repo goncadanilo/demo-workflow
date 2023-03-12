@@ -7,6 +7,8 @@
   "author": "",
   "license": "ISC",
   "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "tsc -p .",
     "prepare": "husky install",
     "test": "jest --passWithNoTests"
   },
